@@ -1,0 +1,17 @@
+{
+  "name": "Bank Statement Converter to Odoo",
+  "short_name": "BankConverter",
+  "description": "Konversi mutasi rekening Bank Mandiri, BCA, BRI, dan BSI ke format Odoo Accounting & Excel.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b0f19",
+  "theme_color": "#6366f1",
+  "icons": [
+    {
+      "src": "/public/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

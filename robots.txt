@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://bankparsen.vercel.app/sitemap.xml

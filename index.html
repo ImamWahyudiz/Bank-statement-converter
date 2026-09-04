@@ -4,81 +4,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bank Statement Converter to Odoo / Excel</title>
-    <!-- Library SheetJS untuk Ekspor & Baca Excel .xlsx -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <!-- Library PDF.js untuk Ekstraksi PDF BCA Client-Side -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <script>
-        if (typeof pdfjsLib !== 'undefined') {
-            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-        }
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Primary Meta Tags -->
+    <title>Bank Statement Converter ke Odoo &amp; Excel | BCA, Mandiri, BRI, BSI</title>
+    <meta name="title" content="Bank Statement Converter ke Odoo &amp; Excel | BCA, Mandiri, BRI, BSI">
+    <meta name="description" content="Aplikasi konversi mutasi rekening koran bank (BCA PDF, Mandiri CSV/XLSX, BRI CSV/XLSX, BSI) ke format Odoo Accounting &amp; Excel. 100% Client-Side, aman, dan tanpa server backend.">
+    <meta name="keywords" content="bank statement converter, convert rekening koran bca pdf ke excel, mutasi bank odoo, mandiri kopra csv to odoo, bri qlola csv to odoo, bsi net banking to excel, odoo accounting import statement, bank reconciliation indonesia">
+    <meta name="author" content="Imam Wahyudi dan Indah Tri Hartini">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <meta name="theme-color" content="#0b0f19">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://bankparsen.vercel.app/">
+
+    <!-- Favicon & Web App Manifest -->
+    <link rel="icon" type="image/svg+xml" href="/public/favicon.svg">
+    <link rel="alternate icon" href="/public/favicon.svg">
+    <link rel="apple-touch-icon" href="/public/favicon.svg">
+    <link rel="manifest" href="/public/manifest.json">
+
+    <!-- Open Graph / Facebook / LinkedIn -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://bankparsen.vercel.app/">
+    <meta property="og:title" content="Bank Statement Converter ke Odoo &amp; Excel | BCA, Mandiri, BRI, BSI">
+    <meta property="og:description" content="Konversi mutasi rekening bank menjadi format siap upload Odoo Accounting &amp; Excel Audit. 100% Client-Side dan Zero Data Transmission.">
+    <meta property="og:image" content="https://bankparsen.vercel.app/public/Mandiri.png">
+    <meta property="og:site_name" content="Bank Statement Converter">
+    <meta property="og:locale" content="id_ID">
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://bankparsen.vercel.app/">
+    <meta name="twitter:title" content="Bank Statement Converter ke Odoo &amp; Excel">
+    <meta name="twitter:description" content="Konversi mutasi rekening bank menjadi format siap upload Odoo Accounting &amp; Excel Audit. 100% Client-Side.">
+    <meta name="twitter:image" content="https://bankparsen.vercel.app/public/Mandiri.png">
+
+    <!-- Structured Data (JSON-LD Schema) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Bank Statement Converter to Odoo",
+      "url": "https://bankparsen.vercel.app/",
+      "description": "Aplikasi client-side converter rekening koran bank Indonesia (BCA, Mandiri, BRI, BSI) ke format Odoo Accounting dan tabel audit Excel.",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "All modern browsers (Chrome, Edge, Firefox, Safari)",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "IDR"
+      },
+      "featureList": [
+        "Ekstraksi teks e-statement PDF Bank BCA",
+        "Parser Delimiter CSV Otomatis Bank Mandiri & BRI",
+        "Parser Excel & HTML-as-XLS Bank BSI",
+        "Ekspor format Odoo Bank Statement (.xlsx)",
+        "Ekspor format Tabel Mutasi Lengkap dengan Running Balance",
+        "100% Client-Side Zero Knowledge Privacy"
+      ],
+      "creator": {
+        "@type": "Person",
+        "name": "Imam Wahyudi dan Indah Tri Hartini"
+      }
+    }
     </script>
-    <!-- Google Font Plus Jakarta Sans -->
+
+    <!-- Performance: DNS Prefetch & Preconnect for External CDNs & Fonts -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet">
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+
+    <!-- Google Font Plus Jakarta Sans with font-display: swap -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Core Stylesheet -->
     <link rel="stylesheet" href="src/css/style.css">
+
+    <!-- Deferred External Libraries for Maximum PageSpeed Score -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" defer></script>
+
+    <!-- Deferred Internal Application Scripts -->
+    <script src="src/js/csv-utils.js" defer></script>
+    <script src="src/js/mandiri-parser.js" defer></script>
+    <script src="src/js/bca-parser.js" defer></script>
+    <script src="src/js/bri-parser.js" defer></script>
+    <script src="src/js/bsi-parser.js" defer></script>
+    <script src="src/js/app.js" defer></script>
 </head>
 
 <body>
 
-    <div class="container">
-        <div class="header-section">
+    <main class="container">
+        <header class="header-section">
             <span class="header-tag">Client-Side Multi-Bank Converter</span>
             <h1>Bank Statement Converter</h1>
-            <p class="subtitle">Konversi mutasi rekening Bank menjadi format Odoo</p>
-        </div>
+            <p class="subtitle">Konversi mutasi rekening Bank Mandiri, BCA, BRI, dan BSI menjadi format siap impor Odoo Accounting &amp; Excel Audit</p>
+        </header>
 
         <!-- 4 Bank Tab Selector -->
-        <div class="tabs-nav">
-            <button id="tabMANDIRI" class="tab-btn active mandiri-tab" onclick="switchBank('mandiri')">
-                <img src="public/Mandiri.png" alt="Bank Mandiri" class="tab-logo" onerror="this.style.display='none'">
+        <nav class="tabs-nav" aria-label="Pilih Bank">
+            <button id="tabMANDIRI" class="tab-btn active mandiri-tab" type="button" aria-label="Bank Mandiri" onclick="switchBank('mandiri')">
+                <img src="public/Mandiri.png" alt="Logo Bank Mandiri" class="tab-logo" width="28" height="28" decoding="async" onerror="this.style.display='none'">
                 <span>Mandiri</span>
                 <span class="tab-badge badge-mandiri">CSV</span>
             </button>
-            <button id="tabBCA" class="tab-btn bca-tab" onclick="switchBank('bca')">
-                <img src="public/BCA.png" alt="Bank BCA" class="tab-logo" onerror="this.style.display='none'">
+            <button id="tabBCA" class="tab-btn bca-tab" type="button" aria-label="Bank BCA" onclick="switchBank('bca')">
+                <img src="public/BCA.png" alt="Logo Bank Central Asia BCA" class="tab-logo" width="28" height="28" decoding="async" onerror="this.style.display='none'">
                 <span>BCA</span>
                 <span class="tab-badge badge-bca">PDF</span>
             </button>
-            <button id="tabBRI" class="tab-btn bri-tab" onclick="switchBank('bri')">
-                <img src="public/BRI.png" alt="Bank BRI" class="tab-logo" onerror="this.style.display='none'">
+            <button id="tabBRI" class="tab-btn bri-tab" type="button" aria-label="Bank BRI" onclick="switchBank('bri')">
+                <img src="public/BRI.png" alt="Logo Bank Rakyat Indonesia BRI" class="tab-logo" width="28" height="28" decoding="async" onerror="this.style.display='none'">
                 <span>BRI</span>
                 <span class="tab-badge badge-bri">CSV</span>
             </button>
-            <button id="tabBSI" class="tab-btn bsi-tab" onclick="switchBank('bsi')">
-                <img src="public/BSI.png" alt="Bank BSI" class="tab-logo" onerror="this.style.display='none'">
+            <button id="tabBSI" class="tab-btn bsi-tab" type="button" aria-label="Bank BSI" onclick="switchBank('bsi')">
+                <img src="public/BSI.png" alt="Logo Bank Syariah Indonesia BSI" class="tab-logo" width="28" height="28" decoding="async" onerror="this.style.display='none'">
                 <span>BSI</span>
                 <span class="tab-badge badge-bsi">XLSX / XLS</span>
             </button>
-        </div>
+        </nav>
 
         <!-- Upload Area -->
-        <div class="upload-area" id="dropZone" onclick="document.getElementById('fileInput').click();">
-            <span class="upload-icon">📄</span>
+        <section class="upload-area" id="dropZone" role="button" tabindex="0" aria-label="Area unggah file mutasi bank" onclick="document.getElementById('fileInput').click();">
+            <span class="upload-icon" aria-hidden="true">📄</span>
             <span class="file-label" id="uploadLabel">Pilih atau Seret File Rekening Koran Mandiri</span>
             <span class="file-sublabel" id="uploadSublabel">Format: .csv</span>
             <div class="file-name" id="fileNameDisplay" style="display: none;"></div>
-            <input type="file" id="fileInput" accept=".csv, .xlsx, .xls" onchange="handleFileSelect(event)">
-        </div>
+            <input type="file" id="fileInput" accept=".csv, .xlsx, .xls" aria-label="Input berkas rekening koran" onchange="handleFileSelect(event)">
+        </section>
 
         <!-- Action Buttons (Unified Dual Export for All Banks) -->
-        <div class="btn-group">
-            <button id="downloadOdooBtn" class="btn" disabled>
+        <section class="btn-group" aria-label="Aksi Ekspor Berkas">
+            <button id="downloadOdooBtn" class="btn" type="button" disabled>
                 Download Odoo Statement (.xlsx)
             </button>
-            <button id="downloadMutasiBtn" class="btn btn-secondary" disabled>
+            <button id="downloadMutasiBtn" class="btn btn-secondary" type="button" disabled>
                 Download Tabel Mutasi Lengkap (.xlsx)
             </button>
-        </div>
+        </section>
 
         <!-- Status Box -->
-        <div id="statusBox" class="status-box"></div>
+        <div id="statusBox" class="status-box" role="status" aria-live="polite"></div>
 
         <!-- Account Info Card -->
-        <div id="accountCard" class="account-card">
+        <section id="accountCard" class="account-card" aria-label="Informasi Rekening">
             <div class="account-grid">
                 <div class="meta-item">
                     <span class="meta-label">Bank</span>
@@ -101,10 +176,10 @@
                     <span class="meta-value success" id="metaIntegrity">OK</span>
                 </div>
             </div>
-        </div>
+        </section>
 
         <!-- Interactive Data Preview -->
-        <div id="previewSection" class="preview-section">
+        <section id="previewSection" class="preview-section" aria-label="Pratinjau Data Transaksi">
             <div class="preview-header">
                 <span class="preview-title" id="previewTitle">Preview Transaksi</span>
                 <span class="preview-count" id="previewCount">0 baris</span>
@@ -117,30 +192,22 @@
                     <tbody id="previewTableBody"></tbody>
                 </table>
             </div>
-        </div>
+        </section>
 
         <!-- Rules / Guidance Card -->
-        <div class="rules-card" id="rulesCard">
+        <section class="rules-card" id="rulesCard" aria-label="Panduan Format Berkas">
             <strong id="rulesTitle">Keterangan Format File Bank Mandiri:</strong>
             <ul id="rulesList">
-                <li>Mendukung file <code>.csv</code>asli unduhan Kopra</li>
+                <li>Mendukung file <code>.csv</code> asli unduhan Kopra / Mandiri Online.</li>
                 <li>Kolom otomatis terdeteksi: <code>PostDate/Date</code>, <code>Remarks/Keterangan</code>, <code>Credit</code>, <code>Debit</code>.</li>
                 <li>Mendukung ekspor ke <b>Odoo Clean (.xlsx)</b> dan <b>Tabel Mutasi Lengkap (.xlsx)</b>.</li>
             </ul>
-        </div>
+        </section>
 
-        <div class="footer-credit">
-            &copy; 2026 Imam Wahyudi dan Indah Tri Hartini
-        </div>
-    </div>
-
-    <!-- Scripts -->
-    <script src="src/js/csv-utils.js"></script>
-    <script src="src/js/mandiri-parser.js"></script>
-    <script src="src/js/bca-parser.js"></script>
-    <script src="src/js/bri-parser.js"></script>
-    <script src="src/js/bsi-parser.js"></script>
-    <script src="src/js/app.js"></script>
+        <footer class="footer-credit">
+            <p>&copy; 2026 Imam Wahyudi dan Indah Tri Hartini &bull; 100% Client-Side Processing &bull; Zero Server Data Storage</p>
+        </footer>
+    </main>
 
 </body>
 

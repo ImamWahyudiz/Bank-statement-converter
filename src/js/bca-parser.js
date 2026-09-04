@@ -22,6 +22,10 @@ const BCAParser = {
             throw new Error("Library PDF.js belum dimuat. Pastikan koneksi internet aktif untuk memuat library.");
         }
 
+        if (!pdfjsLib.GlobalWorkerOptions.workerSrc) {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        }
+
         const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
         const pdfDoc = await loadingTask.promise;
         const pageTexts = [];
